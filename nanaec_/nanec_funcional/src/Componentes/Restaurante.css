@@ -113,3 +113,10 @@ h2 {
   font-weight: 700;
   word-break: break-word;
 }
+.botones-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Espacio entre los botones */
+    margin-top: 10px;
+    justify-content: center;
+}

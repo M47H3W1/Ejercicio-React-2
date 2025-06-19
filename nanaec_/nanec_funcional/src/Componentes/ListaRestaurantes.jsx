@@ -5,7 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import React, { useState } from 'react';
 function ListaRestaurantes({
   restaurantes, 
-  handleEliminar
+  handleEliminar,
 }) 
   {
     const [mensajeErrorLikesNegativos, setMensajeErrorLikesNegativos] = useState("");

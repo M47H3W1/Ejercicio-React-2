@@ -4,11 +4,12 @@ import ListaRestaurantes from "./Componentes/ListaRestaurantes";
 import CrearRestaurante from "./Componentes/CrearRestaurante";
 import ComponenteAxios from './Componentes/ComponeteAxios';
 import Inicio from './Componentes/Inicio';
+import ActualizarRestaurante from './Componentes/ActualizarRestaurante';
 import React, { useState } from 'react';
 import axios from 'axios';
 function App() {
   const endpoint = "http://localhost:3001/restaurantes";
-
+//Use params para obter los parametros de la URL
   const [restaurantes, setRestaurantes] = useState([]);
   // Cargar los restaurantes al iniciar la aplicación
   React.useEffect(() => {
@@ -72,6 +73,14 @@ function App() {
             state={state}
             setState={setState}
             agregarRestaurante={agregarRestaurante}
+            />
+            } 
+            />
+            <Route path='/actualizar' element={
+            <ActualizarRestaurante
+            state={state}
+            setState={setState}
+            actualizarRestaurante={actualizarRestaurante}
             />
             } 
             />

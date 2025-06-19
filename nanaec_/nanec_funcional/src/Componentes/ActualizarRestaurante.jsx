@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import "./ActualizarRestaurante.css";
 //import { Link  } from "react-router-dom";
-function CrearRestaurante (props){
-   
-    const handlerInsertar = () => {
-        const nuevoRestaurante = {
+function ActualizarRestaurante (props){
+   const {actualizarRestaurante} = props;
+
+    const handlerGuardar = () => {
+        const restauranteActualizado = {
             nombre: props.state.nombre,
             direccion: props.state.direccion,
             tipo: props.state.tipo,
@@ -11,8 +13,8 @@ function CrearRestaurante (props){
             UrlImagen: props.state.UrlImagen
         };
 
-        props.agregarRestaurante(nuevoRestaurante);
-        alert("Restaurante creado exitosamente");
+        props.actualizarRestaurante(restauranteActualizado);
+        alert("Restaurante actualizado exitosamente");
         //Se limpia el formulario
         (props.setState({nombre:"", direccion:"", tipo:"", reputacion:"", UrlImagen:""}))
     }
@@ -28,21 +30,13 @@ function CrearRestaurante (props){
     }
 
     return (    
-        <div className="CrearRestaurante">
-            {/*<p>Se utiliza el hook useNavigate</p>*/}
+        <div className="ActualizarRestaurante">
+           
             <button onClick={handleInicio}>Volver al Inicio</button>
             <br />
             <button onClick={handleLista}>Ver lista</button>
             <br />
-            {/*
-            <p>Se utiliza Link</p>
-            <Link to="/">
-                <button>Volver al Inicio</button>
-            </Link>
-            <Link to="/lista">
-                <button>Ver Lista de Restaurantes</button>
-            </Link>
-            */}
+           
             <label>Nombre:</label>
             <input type="text" value={props.state.nombre} onChange={(e) => props.setState({...props.state, nombre: e.target.value})} />
             <label>Dirección:</label>
@@ -66,10 +60,10 @@ function CrearRestaurante (props){
             
             
             
-            <button onClick={handlerInsertar}>Insertar</button>
+            <button onClick={handlerGuardar}>Guardar</button>
             
         </div>  
     );      
 }
 
-export default CrearRestaurante;
+export default ActualizarRestaurante;

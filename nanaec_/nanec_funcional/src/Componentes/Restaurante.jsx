@@ -1,4 +1,5 @@
 import {useState} from "react";
+import { useNavigate } from "react-router-dom";
 import "./Restaurante.css";
 function Restaurante (props){
     
@@ -52,7 +53,22 @@ function Restaurante (props){
     const handlerEliminar_ = () => {
         handleEliminar(index);
     }
-    
+    const navigate = useNavigate();
+
+    const handleActualizar = () => {
+        const restauranteActualizado = {
+            nombre,
+            direccion,
+            tipo,
+            UrlImagen,
+            reputacion
+        };
+        //navigate("/actualizar/" + index, { state: { restaurante: restauranteActualizado } });
+        navigate("/actualizar");
+
+        
+    }
+
     return (
         <div className="Restaurante">
             <img src={UrlImagen} alt="" />
@@ -64,7 +80,10 @@ function Restaurante (props){
             <h4>No me gusta:{preferencias.dislikes}</h4>
             <button onClick={handlerLike}>👍</button>
             <button onClick={handlerDislike}>👎</button>
-            <button onClick={handlerEliminar_}>Eliminar</button>
+            <div className="botones-acciones">
+                <button onClick={handlerEliminar_}>Eliminar</button>
+                <button onClick={handleActualizar}>Actualizar</button>
+            </div>
         </div>  
     );      
     
