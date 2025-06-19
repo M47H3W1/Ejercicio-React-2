@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Restaurante.css";
 function Restaurante (props){
     
-    const {nombre, direccion, tipo, UrlImagen, SumarLikes,RestarDislikes, reputacion, index, handleEliminar}= props;
+    const {id, nombre, direccion, tipo, UrlImagen, SumarLikes,RestarDislikes, reputacion, index, handleEliminar}= props;
 
     const [preferencias, setPreferencias] = useState({
         likes: 0,
@@ -56,17 +56,7 @@ function Restaurante (props){
     const navigate = useNavigate();
 
     const handleActualizar = () => {
-        const restauranteActualizado = {
-            nombre,
-            direccion,
-            tipo,
-            UrlImagen,
-            reputacion
-        };
-        //navigate("/actualizar/" + index, { state: { restaurante: restauranteActualizado } });
-        navigate("/actualizar");
-
-        
+        navigate("/actualizar/" + id );
     }
 
     return (

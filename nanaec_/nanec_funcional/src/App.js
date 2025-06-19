@@ -76,7 +76,7 @@ function App() {
             />
             } 
             />
-            <Route path='/actualizar' element={
+            <Route path='/actualizar/:id' element={
             <ActualizarRestaurante
             state={state}
             setState={setState}

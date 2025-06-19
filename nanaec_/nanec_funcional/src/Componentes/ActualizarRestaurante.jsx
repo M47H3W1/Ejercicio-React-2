@@ -1,8 +1,33 @@
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 import "./ActualizarRestaurante.css";
+import axios from "axios";
 //import { Link  } from "react-router-dom";
 function ActualizarRestaurante (props){
    const {actualizarRestaurante} = props;
+
+   //Con el useParams se obtiene el id del restaurante a actualizar
+    const {id} = useParams();
+
+    useEffect(() => {
+        //cargarRestaurante();
+    }, []);
+
+    const cargarRestaurante = () => {
+        axios.get("http://localhost:3001/restaurantes/" + id)
+        .then(response => {
+            console.log(response.data);
+            const restaurante = response.data;
+            props.setState({
+                nombre: restaurante.nombre,
+                direccion: restaurante.direccion,
+                tipo: restaurante.tipo,
+                reputacion: restaurante.reputacion,
+                UrlImagen: restaurante.UrlImagen
+            });
+        })
+    }
 
     const handlerGuardar = () => {
         const restauranteActualizado = {

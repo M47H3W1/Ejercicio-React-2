@@ -56,6 +56,7 @@ function ListaRestaurantes({
         <Restaurante
           key={index}
           index={index}
+          id={restaurante.id}
           nombre={restaurante.nombre}
           direccion={restaurante.direccion}
           tipo={restaurante.tipo}
