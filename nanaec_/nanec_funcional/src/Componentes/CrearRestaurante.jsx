@@ -1,5 +1,5 @@
-import { Link,useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+//import { Link  } from "react-router-dom";
 function CrearRestaurante (props){
    
     const handlerInsertar = () => {
@@ -29,10 +29,12 @@ function CrearRestaurante (props){
 
     return (    
         <div className="CrearRestaurante">
-            <p>Se utiliza el hook useNavigate</p>
+            {/*<p>Se utiliza el hook useNavigate</p>*/}
             <button onClick={handleInicio}>Volver al Inicio</button>
+            <br />
             <button onClick={handleLista}>Ver lista</button>
-            <br /><br />
+            <br />
+            {/*
             <p>Se utiliza Link</p>
             <Link to="/">
                 <button>Volver al Inicio</button>
@@ -40,7 +42,7 @@ function CrearRestaurante (props){
             <Link to="/lista">
                 <button>Ver Lista de Restaurantes</button>
             </Link>
-
+            */}
             <label>Nombre:</label>
             <input type="text" value={props.state.nombre} onChange={(e) => props.setState({...props.state, nombre: e.target.value})} />
             <label>Dirección:</label>

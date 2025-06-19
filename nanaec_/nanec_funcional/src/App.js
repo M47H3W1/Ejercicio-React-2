@@ -7,18 +7,45 @@ import Inicio from './Componentes/Inicio';
 import React, { useState } from 'react';
 import axios from 'axios';
 function App() {
+  const endpoint = "http://localhost:3001/restaurantes";
+
   const [restaurantes, setRestaurantes] = useState([]);
   // Cargar los restaurantes al iniciar la aplicación
   React.useEffect(() => {
-    obtenerRestaurantesClientes();
+    obtenerRestaurantesAxios();
   }, []);
-  
-  const obtenerRestaurantesClientes = () => {
-    axios.get('http://localhost:3000/restaurantes').then(response => {
-      setRestaurantes(response.data);
-    });
+  //Se cargan los restaurantes desde el servidor
+  const obtenerRestaurantesAxios = () => {
+    axios.get(endpoint)
+      .then(response =>setRestaurantes(response.data))
+      .catch(error => console.error('Error al obtener los restaurantes:', error));
   };
 
+  //Se agrega un nuevo restaurante al servidor
+  const agregarRestauranteAxios = (nuevoRestaurante) => {
+    axios.post(endpoint, nuevoRestaurante)
+      .then(response => {setRestaurantes(prev => [...prev, response.data])})
+      .catch(error => console.error('Error al agregar el restaurante:', error))
+  };
+  //Se elimina un restaurante del servidor
+  const eliminarRestauranteAxios = (id) => {
+    axios.delete(endpoint + '/' + id)
+      .then(() => {setRestaurantes(prev => prev.filter(restaurante => restaurante.id !== id));
+      })
+      .catch(error => console.error('Error al eliminar el restaurante:', error));
+  };
+     
+  //Se actualiza un restaurante en el servidor
+  const actualizarRestaurante = (restauranteActualizado) => {
+    axios.put(endpoint + '/' + restauranteActualizado.id, restauranteActualizado)
+      .then(response => {
+      setRestaurantes(prev => prev.map(restaurante => 
+        restaurante.id === restauranteActualizado.id ? response.data : restaurante
+      ));
+      })
+      .catch(error => console.error('Error al actualizar el restaurante:', error));
+  }
+  
   const [state, setState] = useState({
     nombre: "",
     direccion: "",
@@ -28,13 +55,11 @@ function App() {
   });
 
   const agregarRestaurante = (nuevoRestaurante) => {
-    setRestaurantes((prev) => [...prev, nuevoRestaurante]);
+    agregarRestauranteAxios(nuevoRestaurante);
   };
 
   const eliminarRestaurante = (index) => {
-    setRestaurantes((prev) =>
-      prev.filter((_, i) => i !== index)
-    );
+    eliminarRestauranteAxios(restaurantes[index].id);
   };
 
   return (

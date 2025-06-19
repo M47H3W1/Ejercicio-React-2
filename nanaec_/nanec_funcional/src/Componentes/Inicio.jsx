@@ -1,5 +1,5 @@
-import {Link, useNavigate} from 'react-router-dom';
-
+import {useNavigate} from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 function Incio() {
     const navigate = useNavigate();
     const handleLista=()=> {
@@ -14,17 +14,20 @@ function Incio() {
         Bienvenido a la Aplicación de Restaurantes
      
     </h1>
-    <p>Se utiliza el hook useNavigate</p>
+    {/*<p>Se utiliza el hook useNavigate</p>*/}
     <button onClick={handleLista}>Ver lista de restaurantes</button>
+    <br />
+    <br />
     <button onClick={handleCrear}>Crear nuevo restaurante</button>
-    <br /><br />
-    <p>Se utiliza Link</p>
+    <br />
+    {/*<p>Se utiliza Link</p>
     <Link to="/lista">
       <button>Ir a Restaurantes</button>
     </Link>
     <Link to="/crear">
       <button>Crear Restaurante</button>
     </Link>
+    */}
     </div>
   );
 }
