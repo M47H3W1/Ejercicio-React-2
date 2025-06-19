@@ -3,34 +3,36 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import "./ActualizarRestaurante.css";
 import axios from "axios";
-//import { Link  } from "react-router-dom";
-function ActualizarRestaurante (props){
-   const {actualizarRestaurante} = props;
 
-   //Con el useParams se obtiene el id del restaurante a actualizar
-    const {id} = useParams();
+function ActualizarRestaurante(props) {
+    const { actualizarRestaurante } = props;
+    const { id } = useParams();
+    const navigate = useNavigate();
 
+    // Solo se ejecuta cuando cambia el id
     useEffect(() => {
-        //cargarRestaurante();
-    }, []);
+        cargarRestaurante();
+    }, [id]);
 
     const cargarRestaurante = () => {
+        console.log("Cargando restaurante con id:", id);
         axios.get("http://localhost:3001/restaurantes/" + id)
-        .then(response => {
-            console.log(response.data);
-            const restaurante = response.data;
-            props.setState({
-                nombre: restaurante.nombre,
-                direccion: restaurante.direccion,
-                tipo: restaurante.tipo,
-                reputacion: restaurante.reputacion,
-                UrlImagen: restaurante.UrlImagen
-            });
-        })
-    }
+            .then(response => {
+                const restaurante = response.data;
+                props.setState({
+                    nombre: restaurante.nombre,
+                    direccion: restaurante.direccion,
+                    tipo: restaurante.tipo.charAt(0).toUpperCase() + restaurante.tipo.slice(1).toLowerCase(),
+                    reputacion: restaurante.reputacion,
+                    UrlImagen: restaurante.UrlImagen
+                });
+            })
+            .catch(error => console.error('Error al obtener el restaurante:', error));
+    };
 
     const handlerGuardar = () => {
         const restauranteActualizado = {
+            id,
             nombre: props.state.nombre,
             direccion: props.state.direccion,
             tipo: props.state.tipo,
@@ -40,55 +42,60 @@ function ActualizarRestaurante (props){
 
         props.actualizarRestaurante(restauranteActualizado);
         alert("Restaurante actualizado exitosamente");
-        //Se limpia el formulario
-        (props.setState({nombre:"", direccion:"", tipo:"", reputacion:"", UrlImagen:""}))
-    }
-
-    const navigate = useNavigate();
+        props.setState({ nombre: "", direccion: "", tipo: "", reputacion: "", UrlImagen: "" });
+        navigate("/lista");
+    };
 
     const handleInicio = () => {
         navigate("/");
-    }
+    };
 
     const handleLista = () => {
         navigate("/lista");
-    }
+    };
 
-    return (    
+    return (
         <div className="ActualizarRestaurante">
-           
             <button onClick={handleInicio}>Volver al Inicio</button>
             <br />
             <button onClick={handleLista}>Ver lista</button>
             <br />
-           
+
             <label>Nombre:</label>
-            <input type="text" value={props.state.nombre} onChange={(e) => props.setState({...props.state, nombre: e.target.value})} />
+            <input type="text" value={props.state.nombre} onChange={(e) => props.setState({ ...props.state, nombre: e.target.value })} />
             <label>Dirección:</label>
-            <input type="text" value={props.state.direccion} onChange={(e) => props.setState({...props.state, direccion: e.target.value})} />
+            <input type="text" value={props.state.direccion} onChange={(e) => props.setState({ ...props.state, direccion: e.target.value })} />
             <label>Tipo:</label>
             <select
                 value={props.state.tipo}
                 onChange={(e) => props.setState({ ...props.state, tipo: e.target.value })}
             >
                 <option value="">Seleccione un tipo</option>
-                <option value="Italiana">Italiana</option>
-                <option value="China">China</option>
-                <option value="Mexicana">Mexicana</option>
-                <option value="Japonesa">Japonesa</option>
+                <option value="Tradicional">Tradicional</option>
+                <option value="Cafeteria">Cafeteria</option>
+                <option value="Desayunos">Desayunos</option>
+                <option value="Vegana">Vegana</option>
                 <option value="Vegetariana">Vegetariana</option>
             </select>
             <label>Reputación:</label>
-            <input type="number" value={props.state.reputacion} onChange={(e) => props.setState({...props.state, reputacion: e.target.value})} />
+            <input type="number" value={props.state.reputacion} onChange={(e) => props.setState({ ...props.state, reputacion: e.target.value })} />
             <label>URL Imagen:</label>
-            <input type="text" value={props.state.UrlImagen} onChange={(e)=> props.setState({...props.state,UrlImagen: e.target.value})}/>
+            <input type="text" value={props.state.UrlImagen} onChange={(e) => props.setState({ ...props.state, UrlImagen: e.target.value })} />
             
-            
-            
+            {props.state.UrlImagen && (
+                <div style={{ margin: "10px 0" }}>
+                    <img
+                        src={props.state.UrlImagen}
+                        alt="Vista previa"
+                        style={{ maxWidth: "200px", maxHeight: "150px", borderRadius: "8px", border: "1px solid #ccc" }}
+                        onError={e => { e.target.src = "https://via.placeholder.com/200x150?text=Sin+Imagen"; }}
+                    />
+                </div>
+            )}
+
             <button onClick={handlerGuardar}>Guardar</button>
-            
-        </div>  
-    );      
+        </div>
+    );
 }
 
 export default ActualizarRestaurante;
