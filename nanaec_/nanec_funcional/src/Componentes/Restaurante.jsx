@@ -1,6 +1,6 @@
 import {useState} from "react";
 import { useNavigate } from "react-router-dom";
-import "./Restaurante.css";
+import "./Restaurante_.css";
 function Restaurante (props){
     
     const {id, nombre, direccion, tipo, UrlImagen, SumarLikes,RestarDislikes, reputacion, index, handleEliminar}= props;

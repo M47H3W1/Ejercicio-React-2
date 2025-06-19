@@ -80,7 +80,12 @@ function ActualizarRestaurante(props) {
             <label>Reputación:</label>
             <input type="number" value={props.state.reputacion} onChange={(e) => props.setState({ ...props.state, reputacion: e.target.value })} />
             <label>URL Imagen:</label>
-            <input type="text" value={props.state.UrlImagen} onChange={(e) => props.setState({ ...props.state, UrlImagen: e.target.value })} />
+            <input
+                type="text"
+                value={props.state.UrlImagen}
+                onChange={(e) => props.setState({ ...props.state, UrlImagen: e.target.value })}
+                onFocus={e => e.target.select()}
+            />
             
             {props.state.UrlImagen && (
                 <div style={{ margin: "10px 0" }}>
