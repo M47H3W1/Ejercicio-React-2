@@ -42,7 +42,7 @@ function ListaRestaurantes({
       <br /><br />
       <p>Se utiliza Link</p>
       <Link to="/">
-                <button>Volver al Inicio</button>
+        <button>Volver al Inicio</button>
       </Link>
       <h1>Cantidad likes: {likesTotales}</h1>
       {mensajeErrorLikesNegativos && (

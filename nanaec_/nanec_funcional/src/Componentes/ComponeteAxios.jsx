@@ -6,15 +6,15 @@ import axios from 'axios';
 
 const ComponenteAxios = () => {
     const [restaurantes, setRestaurantes] = useState([]);
-    
+     const baseURL = 'http://localhost:8000/';
     const [clientes, setClientes] = useState([]);
 
     const obtenerRestaurantesClientes = () => {
-        axios.get('http://localhost:3000/restaurantes').then(response => {
+        axios.get(baseURL + 'restaurantes').then(response => {
             setRestaurantes(response.data);
             console.log(response);
         });
-        axios.get('http://localhost:3000/clientes').then(response => {
+        axios.get(baseURL + 'clientes').then(response => {
             setClientes(response.data);
             console.log(response);
         });
