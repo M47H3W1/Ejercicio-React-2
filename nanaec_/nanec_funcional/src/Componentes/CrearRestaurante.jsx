@@ -1,5 +1,5 @@
-import { Link,useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+//import { Link  } from "react-router-dom";
 function CrearRestaurante (props){
    
     const handlerInsertar = () => {
@@ -29,10 +29,12 @@ function CrearRestaurante (props){
 
     return (    
         <div className="CrearRestaurante">
-            <p>Se utiliza el hook useNavigate</p>
+            {/*<p>Se utiliza el hook useNavigate</p>*/}
             <button onClick={handleInicio}>Volver al Inicio</button>
+            <br />
             <button onClick={handleLista}>Ver lista</button>
-            <br /><br />
+            <br />
+            {/*
             <p>Se utiliza Link</p>
             <Link to="/">
                 <button>Volver al Inicio</button>
@@ -40,7 +42,7 @@ function CrearRestaurante (props){
             <Link to="/lista">
                 <button>Ver Lista de Restaurantes</button>
             </Link>
-
+            */}
             <label>Nombre:</label>
             <input type="text" value={props.state.nombre} onChange={(e) => props.setState({...props.state, nombre: e.target.value})} />
             <label>Dirección:</label>
@@ -51,10 +53,10 @@ function CrearRestaurante (props){
                 onChange={(e) => props.setState({ ...props.state, tipo: e.target.value })}
             >
                 <option value="">Seleccione un tipo</option>
-                <option value="Italiana">Italiana</option>
-                <option value="China">China</option>
-                <option value="Mexicana">Mexicana</option>
-                <option value="Japonesa">Japonesa</option>
+                <option value="Tradicional">Tradicional</option>
+                <option value="Cafeteria">Cafeteria</option>
+                <option value="Desayunos">Desayunos</option>
+                <option value="Vegana">Vegana</option>
                 <option value="Vegetariana">Vegetariana</option>
             </select>
             <label>Reputación:</label>
@@ -62,39 +64,7 @@ function CrearRestaurante (props){
             <label>URL Imagen:</label>
             <input type="text" value={props.state.UrlImagen} onChange={(e)=> props.setState({...props.state,UrlImagen: e.target.value})}/>
             
-            <label>Categoría:</label>
-            <div>
-                <label>
-                    <input
-                        type="radio"
-                        name="categoria"
-                        value="Vegetariana"
-                        checked={props.state.categoria === "Vegetariana"}
-                        onChange={(e) => props.setState({ ...props.state, categoria: e.target.value })}
-                    />
-                    Vegetariana
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="categoria"
-                        value="Carnívora"
-                        checked={props.state.categoria === "Carnívora"}
-                        onChange={(e) => props.setState({ ...props.state, categoria: e.target.value })}
-                    />
-                    Carnívora
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="categoria"
-                        value="Vegana"
-                        checked={props.state.categoria === "Vegana"}
-                        onChange={(e) => props.setState({ ...props.state, categoria: e.target.value })}
-                    />
-                    Vegana
-                </label>
-            </div>
+            
             
             <button onClick={handlerInsertar}>Insertar</button>
             
