@@ -15,16 +15,26 @@ function ActualizarRestaurante(props) {
     }, [id]);
 
     const cargarRestaurante = () => {
+        if (!id) {
+            console.error("No se recibió un id válido para actualizar.");
+            return;
+        }
         console.log("Cargando restaurante con id:", id);
-        axios.get("http://localhost:3001/restaurantes/" + id)
+        axios.get("http://localhost:8000/restaurantes/" + id)
             .then(response => {
                 const restaurante = response.data;
+                if (!restaurante) {
+                    alert("No se encontró el restaurante.");
+                    return;
+                }
                 props.setState({
-                    nombre: restaurante.nombre,
-                    direccion: restaurante.direccion,
-                    tipo: restaurante.tipo.charAt(0).toUpperCase() + restaurante.tipo.slice(1).toLowerCase(),
-                    reputacion: restaurante.reputacion,
-                    UrlImagen: restaurante.UrlImagen
+                    nombre: restaurante.nombre || "",
+                    direccion: restaurante.direccion || "",
+                    tipo: typeof restaurante.tipo === "string" && restaurante.tipo.length > 0
+                        ? restaurante.tipo.charAt(0).toUpperCase() + restaurante.tipo.slice(1).toLowerCase()
+                        : "",
+                    reputacion: restaurante.reputacion || "",
+                    UrlImagen: restaurante.url || ""
                 });
             })
             .catch(error => console.error('Error al obtener el restaurante:', error));
@@ -37,7 +47,7 @@ function ActualizarRestaurante(props) {
             direccion: props.state.direccion,
             tipo: props.state.tipo,
             reputacion: props.state.reputacion,
-            UrlImagen: props.state.UrlImagen
+            url: props.state.UrlImagen // <-- usa 'url' para el backend
         };
 
         props.actualizarRestaurante(restauranteActualizado);

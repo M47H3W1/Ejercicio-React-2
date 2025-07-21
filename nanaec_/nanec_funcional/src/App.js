@@ -8,7 +8,7 @@ import ActualizarRestaurante from './Componentes/ActualizarRestaurante';
 import React, { useState } from 'react';
 import axios from 'axios';
 function App() {
-  const endpoint = "http://localhost:3001/restaurantes";
+  const endpoint = "http://localhost:8000/restaurantes";
 //Use params para obter los parametros de la URL
   const [restaurantes, setRestaurantes] = useState([]);
   // Cargar los restaurantes al iniciar la aplicación
@@ -26,14 +26,23 @@ function App() {
 
   //Se agrega un nuevo restaurante al servidor
   const agregarRestauranteAxios = (nuevoRestaurante) => {
-    axios.post(endpoint, nuevoRestaurante)
-      .then(response => {setRestaurantes(prev => [...prev, response.data])})
-      .catch(error => console.error('Error al agregar el restaurante:', error))
+    const restauranteParaBackend = {
+      ...nuevoRestaurante,
+      url: nuevoRestaurante.UrlImagen,
+    };
+    delete restauranteParaBackend.UrlImagen;
+
+    axios.post(endpoint, restauranteParaBackend)
+      .then(() => {
+        obtenerRestaurantesAxios(); // Recarga la lista desde el backend
+      })
+      .catch(error => console.error('Error al agregar el restaurante:', error));
   };
   //Se elimina un restaurante del servidor
   const eliminarRestauranteAxios = (id) => {
     axios.delete(endpoint + '/' + id)
-      .then(() => {setRestaurantes(prev => prev.filter(restaurante => restaurante.id !== id));
+      .then(() => {
+        obtenerRestaurantesAxios(); // Recarga la lista desde el backend
       })
       .catch(error => console.error('Error al eliminar el restaurante:', error));
   };
@@ -41,10 +50,8 @@ function App() {
   //Se actualiza un restaurante en el servidor
   const actualizarRestaurante = (restauranteActualizado) => {
     axios.put(endpoint + '/' + restauranteActualizado.id, restauranteActualizado)
-      .then(response => {
-      setRestaurantes(prev => prev.map(restaurante => 
-        restaurante.id === restauranteActualizado.id ? response.data : restaurante
-      ));
+      .then(() => {
+        obtenerRestaurantesAxios(); // Recarga la lista desde el backend
       })
       .catch(error => console.error('Error al actualizar el restaurante:', error));
   }
@@ -52,7 +59,7 @@ function App() {
   const [state, setState] = useState({
     nombre: "",
     direccion: "",
-    tipo: "",
+    tipo: "", 
     reputacion: "",
     UrlImagen: "",
   });
@@ -62,7 +69,12 @@ function App() {
   };
 
   const eliminarRestaurante = (index) => {
-    eliminarRestauranteAxios(restaurantes[index].id);
+    const restaurante = restaurantes[index];
+    if (!restaurante || !restaurante._id) {
+      alert("No se puede eliminar: restaurante sin _id.");
+      return;
+    }
+    eliminarRestauranteAxios(restaurante._id);
   };
 
   return (
@@ -78,14 +90,13 @@ function App() {
             />
             } 
             />
-            <Route path='/actualizar/:id' element={
-            <ActualizarRestaurante
-            state={state}
-            setState={setState}
-            actualizarRestaurante={actualizarRestaurante}
-            />
-            } 
-            />
+            <Route path="/actualizar/:id" element={
+  <ActualizarRestaurante
+    state={state}
+    setState={setState}
+    actualizarRestaurante={actualizarRestaurante}
+  />
+} />
           <Route
             path="/lista"
             element={
