@@ -1,6 +1,6 @@
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
 import "./ActualizarRestaurante.css";
 import axios from "axios";
 import { ENDPOINTS } from '../config/endpoints';
@@ -8,6 +8,7 @@ import { ENDPOINTS } from '../config/endpoints';
 function ActualizarRestaurante(props) {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [imagenError, setImagenError] = useState(false);
 
     // Solo se ejecuta cuando cambia el id
     useEffect(() => {
@@ -18,26 +19,44 @@ function ActualizarRestaurante(props) {
         console.log("Cargando restaurante con id:", id);
         axios.get(`${ENDPOINTS.RESTAURANTES}/${id}`)
             .then(response => {
+                console.log("📦 Datos del restaurante:", response.data);
                 const restaurante = response.data;
+                
+                // Validar que el restaurante existe
+                if (!restaurante) {
+                    console.error("❌ No se encontró el restaurante");
+                    return;
+                }
+                
                 props.setState({
-                    nombre: restaurante.nombre,
-                    direccion: restaurante.direccion,
-                    tipo: restaurante.tipo.charAt(0).toUpperCase() + restaurante.tipo.slice(1).toLowerCase(),
-                    reputacion: restaurante.reputacion,
-                    UrlImagen: restaurante.UrlImagen
+                    id: restaurante._id || restaurante.id, // para que el formulario siempre tenga id
+                    nombre: restaurante.nombre || "",
+                    direccion: restaurante.direccion || "",
+                    tipo: restaurante.tipo || "",
+                    reputacion: restaurante.reputacion || "",
+                    UrlImagen: restaurante.UrlImagen || restaurante.url || ""
                 });
             })
-            .catch(error => console.error('Error al obtener el restaurante:', error));
+            .catch(error => {
+                console.error('❌ Error al obtener el restaurante:', error);
+                console.error('📋 Error response:', error.response?.data);
+                console.error('🔢 Status code:', error.response?.status);
+            });
     };
 
     const handlerGuardar = () => {
+        if (!props.state.nombre || !props.state.direccion || !props.state.tipo) {
+            alert("Por favor completa todos los campos obligatorios");
+            return;
+        }
+
         const restauranteActualizado = {
-            _id: id, // Usar _id en lugar de id
-            nombre: props.state.nombre,
-            direccion: props.state.direccion,
+            _id: id, // Cambia id por _id
+            nombre: props.state.nombre.trim(),
+            direccion: props.state.direccion.trim(),
             tipo: props.state.tipo,
-            reputacion: props.state.reputacion,
-            url: props.state.UrlImagen // Usar url en lugar de UrlImagen
+            reputacion: parseInt(props.state.reputacion) || 1,
+            url: props.state.UrlImagen.trim() || ""
         };
 
         props.actualizarRestaurante(restauranteActualizado);
@@ -83,18 +102,38 @@ function ActualizarRestaurante(props) {
             <input
                 type="text"
                 value={props.state.UrlImagen}
-                onChange={(e) => props.setState({ ...props.state, UrlImagen: e.target.value })}
+                onChange={e => {
+                    props.setState({ ...props.state, UrlImagen: e.target.value });
+                    setImagenError(false); // Resetear error al cambiar URL
+                }}
                 onFocus={e => e.target.select()}
             />
             
-            {props.state.UrlImagen && (
+            {props.state.UrlImagen && !imagenError && (
                 <div style={{ margin: "10px 0" }}>
                     <img
                         src={props.state.UrlImagen}
                         alt="Vista previa"
                         style={{ maxWidth: "200px", maxHeight: "150px", borderRadius: "8px", border: "1px solid #ccc" }}
-                        onError={e => { e.target.src = "https://via.placeholder.com/200x150?text=Sin+Imagen"; }}
+                        onError={() => setImagenError(true)}
                     />
+                </div>
+            )}
+            {imagenError && (
+                <div style={{
+                    width: "200px",
+                    height: "150px",
+                    background: "#f8d7da",
+                    color: "#721c24",
+                    border: "1px solid #f5c6cb",
+                    borderRadius: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "14px",
+                    margin: "10px 0"
+                }}>
+                    No se pudo cargar la imagen
                 </div>
             )}
 

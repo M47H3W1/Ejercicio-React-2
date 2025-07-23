@@ -1,17 +1,32 @@
 import Restaurante from './Restaurante';
-import {useNavigate} from 'react-router-dom';
-import React, { useState } from 'react'; // Quitar useEffect
+import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
+import { ENDPOINTS } from '../config/endpoints';
 
 function ListaRestaurantes({
   restaurantes, 
   handleEliminar,
   obtenerRestaurantes
 }) {
-  // ELIMINAR ESTE useEffect - está causando el problema
-  // useEffect(() => {
-  //   console.log('🔄 ListaRestaurantes montado, refrescando datos...');
-  //   obtenerRestaurantes();
-  // }, []);
+  const [tiposPorRestaurante, setTiposPorRestaurante] = useState({});
+
+  useEffect(() => {
+    // Por cada restaurante, obtener sus tipos
+    async function fetchTipos() {
+      const tiposMap = {};
+      await Promise.all(restaurantes.map(async (restaurante) => {
+        try {
+          const res = await axios.get(`${ENDPOINTS.MENU}/restaurante/${restaurante._id || restaurante.id}`);
+          tiposMap[restaurante._id || restaurante.id] = res.data.map(tipo => tipo.nombre || tipo.tipo || tipo);
+        } catch (e) {
+          tiposMap[restaurante._id || restaurante.id] = [];
+        }
+      }));
+      setTiposPorRestaurante(tiposMap);
+    }
+    if (restaurantes.length > 0) fetchTipos();
+  }, [restaurantes]);
 
   const [mensajeErrorLikesNegativos, setMensajeErrorLikesNegativos] = useState("");
   const [likesTotales, setLikesTotales] = useState(0);
@@ -59,7 +74,7 @@ function ListaRestaurantes({
           id={restaurante._id || restaurante.id}
           nombre={restaurante.nombre}
           direccion={restaurante.direccion}
-          tipo={restaurante.tipo}
+          tipos={tiposPorRestaurante[restaurante._id || restaurante.id] || []} // <-- pasa los tipos
           reputacion={restaurante.reputacion}
           UrlImagen={restaurante.UrlImagen || restaurante.url}
           SumarLikes={SumarLikes}

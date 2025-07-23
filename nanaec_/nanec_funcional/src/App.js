@@ -63,12 +63,10 @@ function App() {
      
   //Se actualiza un restaurante en el servidor
   const actualizarRestaurante = (restauranteActualizado) => {
-    const id = restauranteActualizado._id || restauranteActualizado.id;
-    console.log('📝 Actualizando restaurante:', restauranteActualizado);
-    
+    const id = restauranteActualizado._id; // Usa _id
+    console.log('📝 Objeto enviado para actualizar:', restauranteActualizado); // <-- Agregado para depuración
     axios.put(`${ENDPOINTS.RESTAURANTES}/${id}`, restauranteActualizado)
       .then(response => {
-        console.log('✅ Restaurante actualizado:', response.data);
         setRestaurantes(prev => prev.map(restaurante => 
           (restaurante._id || restaurante.id) === id ? response.data : restaurante
         ));
