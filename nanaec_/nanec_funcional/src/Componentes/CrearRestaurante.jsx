@@ -8,7 +8,7 @@ function CrearRestaurante (props){
             direccion: props.state.direccion,
             tipo: props.state.tipo,
             reputacion: props.state.reputacion,
-            UrlImagen: props.state.UrlImagen
+            url: props.state.UrlImagen
         };
 
         props.agregarRestaurante(nuevoRestaurante);

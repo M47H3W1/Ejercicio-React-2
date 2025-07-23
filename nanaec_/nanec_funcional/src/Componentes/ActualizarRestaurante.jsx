@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import "./ActualizarRestaurante.css";
 import axios from "axios";
+import { ENDPOINTS } from '../config/endpoints';
 
 function ActualizarRestaurante(props) {
-    const { actualizarRestaurante } = props;
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -16,7 +16,7 @@ function ActualizarRestaurante(props) {
 
     const cargarRestaurante = () => {
         console.log("Cargando restaurante con id:", id);
-        axios.get("http://localhost:3001/restaurantes/" + id)
+        axios.get(`${ENDPOINTS.RESTAURANTES}/${id}`)
             .then(response => {
                 const restaurante = response.data;
                 props.setState({
@@ -32,12 +32,12 @@ function ActualizarRestaurante(props) {
 
     const handlerGuardar = () => {
         const restauranteActualizado = {
-            id,
+            _id: id, // Usar _id en lugar de id
             nombre: props.state.nombre,
             direccion: props.state.direccion,
             tipo: props.state.tipo,
             reputacion: props.state.reputacion,
-            UrlImagen: props.state.UrlImagen
+            url: props.state.UrlImagen // Usar url en lugar de UrlImagen
         };
 
         props.actualizarRestaurante(restauranteActualizado);
